@@ -19,6 +19,8 @@ class Map {
         void create();
         int getMaxX();
         int getMaxY();
+        int getGateX();
+        int getGateY();
         void moveEnemies();
         void checkCollision();
         void handleFight(int enemyIndex);
@@ -26,13 +28,18 @@ class Map {
         void enemyDebug();
         
     private:
+        void changeStage(int stageNumber);
+
         static const int X_SIZE = 20;
         static const int Y_SIZE = 20;
-        std::vector<Enemy> enemies;
-        int coords[X_SIZE][Y_SIZE];
-        Player *player;
         static const int LOGCAP = 20;
+        Player *player;
+        std::vector<Enemy> enemies;
         std::string logs[LOGCAP]; 
+        int coords[X_SIZE][Y_SIZE];
+        int stage;
+        int gateX;
+        int gateY;
 };
 
 #endif

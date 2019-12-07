@@ -59,7 +59,7 @@ void handleCommand(std::string command) {
     //move enemies with sick AI
     map->moveEnemies();
     //update the log that is drawn on the right side of the grid
-    map->updateLog("Player moved to X: " + std::to_string(player->getX()) + " Y: " + std::to_string(player->getY()));
+    map->updateLog("Player moved to X: " + std::to_string(player->getX()+1) + " Y: " + std::to_string(player->getY()+1));
     //check collisions between player and other entities or items
     map->checkCollision();
 }

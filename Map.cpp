@@ -3,6 +3,7 @@
 
 Map::Map(Player *thePlayer) {
     player = thePlayer;
+    stage = 1;
     std::fill_n(logs, LOGCAP, "");
     create();
 }
@@ -10,14 +11,17 @@ Map::~Map() {
 
 }
 void Map::draw() {
+    std::cout << "STAGE " << stage << std::endl;
     for(int i = 0; i<X_SIZE; i++) {
         for(int j = 0; j<Y_SIZE; j++) {
             if(i == player->getY() && j == player->getX()) 
                 player->drawPlayer();
+            else if(i == gateY && j == gateX) {
+                std::cout << "\u22D2 ";
+            }
             else {
                 bool entityMatch = false;
                 //TODO REFACTOR THIS
-                
                 for(int k = 0; k<enemies.size(); k++) {
                     if(i == enemies[k].getY() && j == enemies[k].getX()) {
                         enemies[k].draw();
@@ -40,19 +44,31 @@ void Map::drawLog(int lineNumber) {
     std::cout << "\t" << logs[lineNumber];
 }
 void Map::create() {
+    gateX = rand() % 19;
+    gateY = rand() % 19;
+    
+    enemies.clear();
+
     for(int i = 0; i<X_SIZE; i++) {
         for(int j = 0; j<Y_SIZE; j++) {
-            if(rand() % 100 > 90 && (i < player->getX() - 2 || i > player->getX() + 2) && (j < player->getY() - 2 || j > player->getY() + 2))
+            if(rand() % 100 > 90 && (i < player->getX() - 2 || i > player->getX() + 2) && (j < player->getY() - 2 || j > player->getY() + 2) && i != gateY && j != gateX)
                 enemies.push_back(* new Enemy(i, j));
             coords[i][j] = 0;
         }
     } 
 }
+
 int Map::getMaxX() {
     return X_SIZE;
 }
 int Map::getMaxY() {
     return Y_SIZE;
+}
+int Map::getGateX() {
+    return gateX;
+}
+int Map::getGateY() {
+    return gateY;
 }
 
 void Map::moveEnemies() {
@@ -70,8 +86,13 @@ void Map::moveEnemies() {
             }
 
         }
-        int randomf = rand() % 100;
-        if(randomf > 90) {
+        if(enemies[i].getX() + playerDistanceX == gateX && enemies[i].getY() == gateY) {
+            canMoveX = false;
+        }
+        if(enemies[i].getY() + playerDistanceY == gateY && enemies[i].getX() == gateX) {
+            canMoveY = false;
+        }
+        if(rand() % 100 > 90) {
             int random = rand() % 100;
             if(random > 50 && canMoveX) {
                 enemies[i].setX(enemies[i].getX() + playerDistanceX);
@@ -98,6 +119,9 @@ void Map::checkCollision() {
             handleFight(i);
         }
     }
+    if(player->getX() == gateX && player->getY() == gateY) {
+        changeStage(stage + 1);
+    }
 }
 
 void Map::handleFight(int enemyIndex) {
@@ -108,8 +132,8 @@ void Map::handleFight(int enemyIndex) {
         player->setHP(newPlayerHP);
         enemies[enemyIndex].setHP(newEnemyHP);
     }   
-    if(enemies[enemyIndex].getHP() > 0 || !player->isAlive()) {
-        std::cout << "YOU DIEDED" << std::endl;
+    if(enemies[enemyIndex].isAlive() || !player->isAlive()) {
+        updateLog("You died.");
     } else {
         enemies.erase(enemies.begin() + enemyIndex);
         updateLog("Beat enemy. Lost " + std::to_string(originalHP - player->getHP()) + "HP in action.");
@@ -120,4 +144,10 @@ void Map::enemyDebug() {
     for(int i = 0; i<enemies.size(); i++) {
         std::cout << i << ": " << enemies[i].getHP() << " " << enemies[i].getStrength() << std::endl;
     }
+}
+
+void Map::changeStage(int stageNumber) {
+    updateLog("Moving to stage number " + std::to_string(stageNumber) + ".");
+    stage = stageNumber;
+    create();
 }
