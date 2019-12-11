@@ -1,5 +1,4 @@
 #include "Map.hpp"
-#include "util.h"
 
 Map::Map(Player *thePlayer) {
     player = thePlayer;
@@ -17,7 +16,7 @@ void Map::draw() {
             if(i == player->getY() && j == player->getX()) 
                 player->drawPlayer();
             else if(i == gateY && j == gateX) {
-                std::cout << "\u22D2 ";
+                std::cout << "\u22C2 ";
             }
             else {
                 bool entityMatch = false;
@@ -26,10 +25,18 @@ void Map::draw() {
                     if(i == enemies[k].getY() && j == enemies[k].getX()) {
                         enemies[k].draw();
                         entityMatch = true;
+                        break;
+                    }
+                }
+                for(int k = 0; k<flowers.size(); k++) {
+                    if(i == flowers[k].getY() && j == flowers[k].getX()) {
+                        flowers[k].draw();
+                        entityMatch = true;
+                        break;
                     }
                 }
                 if(!entityMatch) {
-                    std::cout << ". ";
+                    std::cout << "\u22C5 ";
                 }
             }
             
@@ -48,12 +55,15 @@ void Map::create() {
     gateY = rand() % 19;
     
     enemies.clear();
+    flowers.clear();
 
     for(int i = 0; i<X_SIZE; i++) {
         for(int j = 0; j<Y_SIZE; j++) {
             if(rand() % 100 > 90 && (i < player->getX() - 2 || i > player->getX() + 2) && (j < player->getY() - 2 || j > player->getY() + 2) && i != gateY && j != gateX)
                 enemies.push_back(* new Enemy(i, j));
-            coords[i][j] = 0;
+            else if(rand() % 100 > 97 && (i < player->getX() - 2 || i > player->getX() + 2) && (j < player->getY() - 2 || j > player->getY() + 2) && i != gateY && j != gateX) {
+                flowers.push_back(* new Flower(i, j));
+            }
         }
     } 
 }
@@ -72,6 +82,7 @@ int Map::getGateY() {
 }
 
 void Map::moveEnemies() {
+    int moveChanceMod = stage + 10 > 40 ? 40 : stage + 10;
     for(int i = 0; i < enemies.size(); i++) {
         int playerDistanceX = plusMinusOne(player->getX() - enemies[i].getX());
         int playerDistanceY = plusMinusOne(player->getY() - enemies[i].getY());
@@ -84,7 +95,6 @@ void Map::moveEnemies() {
             if(enemies[j].getY() == enemies[i].getY() + playerDistanceY && i != j && enemies[i].getX() == enemies[j].getX()) {
                 canMoveY = false;
             }
-
         }
         if(enemies[i].getX() + playerDistanceX == gateX && enemies[i].getY() == gateY) {
             canMoveX = false;
@@ -92,7 +102,15 @@ void Map::moveEnemies() {
         if(enemies[i].getY() + playerDistanceY == gateY && enemies[i].getX() == gateX) {
             canMoveY = false;
         }
-        if(rand() % 100 > 90) {
+        for(int j = 0; j < flowers.size(); j++) {
+            if(flowers[j].getX() == enemies[i].getX() + playerDistanceX && enemies[i].getY() == flowers[j].getY()) {
+                canMoveX = false;
+            }
+            if(flowers[j].getY() == enemies[i].getY() + playerDistanceY && enemies[i].getX() == flowers[j].getX()) {
+                canMoveY = false;
+            }
+        }
+        if(rand() % 100 > 100 - moveChanceMod) {
             int random = rand() % 100;
             if(random > 50 && canMoveX) {
                 enemies[i].setX(enemies[i].getX() + playerDistanceX);
@@ -119,6 +137,11 @@ void Map::checkCollision() {
             handleFight(i);
         }
     }
+    for(int i = 0; i < flowers.size(); i++) {
+        if(flowers[i].getX() == player->getX() && flowers[i].getY() == player->getY()) {
+            handleEffect(i);
+        }
+    }
     if(player->getX() == gateX && player->getY() == gateY) {
         changeStage(stage + 1);
     }
@@ -135,9 +158,19 @@ void Map::handleFight(int enemyIndex) {
     if(enemies[enemyIndex].isAlive() || !player->isAlive()) {
         updateLog("You died.");
     } else {
+        int expAmount = enemies[enemyIndex].getStrength() * 2;
         enemies.erase(enemies.begin() + enemyIndex);
         updateLog("Beat enemy. Lost " + std::to_string(originalHP - player->getHP()) + "HP in action.");
+        updateLog("Gained " + std::to_string(expAmount) + " experience points!");
+        if(player->incrementExp(expAmount)) {
+            updateLog("Leveled up! Stamina has been replenished!");
+        }
     }
+}
+
+void Map::handleEffect(int flowerIndex) {
+    flowers.erase(flowers.begin() + flowerIndex);
+    player->applyEffect(flowers[flowerIndex].getEffect(), flowers[flowerIndex].getEffectValue());
 }
 
 void Map::enemyDebug() {

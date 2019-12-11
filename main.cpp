@@ -5,16 +5,19 @@
 #include "Player.hpp"
 #include "Map.hpp"
 
-//init player and map as pointers, Player is initialized here because of reasons
+//init player and map
 Player *player = new Player();
 Map *map = new Map(player);
 
 void handleCommand(std::string command);
+void reset();
 
 //main function and mainloop
 int main() {
     std::string command = "";
     while(true) {
+        if(player->getHP() <= 0 || player->getStamina() <= 0) 
+            reset();
         //seed for rand()
         srand(time(0));
         //clears the terminal/cmd before redraw
@@ -30,6 +33,12 @@ int main() {
     }   
     return 0;
 } 
+
+//doing it the harsh way
+void reset() {
+    player = new Player();
+    map = new Map(player);
+}
 
 //handle commands
 void handleCommand(std::string command) {
