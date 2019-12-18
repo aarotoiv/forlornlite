@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+//flower class
 class Flower {
     public: 
         Flower(int xPos, int yPos);

@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+//entity class
+//player and enemy class inherit this classes functionalities
 class Entity {
     public:
         Entity();

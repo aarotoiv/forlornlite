@@ -6,15 +6,15 @@ Player::Player() : Entity(5, 5, 100, 10) {
     exp = 0;
 }
 Player::~Player() {}
-int Player::getStamina() {
-    return stamina;
-}
+//draw unicode rect
 void Player::drawPlayer() {
     std::cout << "\u25A0 ";
 }   
+//draw player stats under the grid
 void Player::drawStats() {
     std::cout << "HP\tSTAMINA\tLEVEL\tEXP\n" << Entity::getHP() << "\t" << stamina << "\t" << level << "\t" << std::to_string(exp - (level-1) * 100) + "/100" << std::endl; 
 }
+//check if player is attempting to get out of the set grid
 void Player::checkBounds(int maxX, int maxY) {
     if(Entity::getX() < 0) 
         Entity::setX(0);
@@ -28,11 +28,13 @@ void Player::checkBounds(int maxX, int maxY) {
     else
         stamina--;
 }
+//apply flower effect
 void Player::applyEffect(std::string effect, int value) {
     if(effect == "hp") {
         Entity::setHP(Entity::getHP() + value);
     }
 }
+//increase exp, level up if exp >= 100, return a bool so map knows if level up happened
 bool Player::incrementExp(int val) {
     exp += val;
     int levelProg = exp - (level-1) * 100;
@@ -42,4 +44,8 @@ bool Player::incrementExp(int val) {
         return true;
     }
     return false;
+}
+//get stamina
+int Player::getStamina() {
+    return stamina;
 }

@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cmath>
-#include "time.h"
+#include <time.h>
 
 #include "Player.hpp"
 #include "Map.hpp"

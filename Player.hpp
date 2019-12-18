@@ -5,6 +5,8 @@
 
 #include "Entity.hpp"
 
+//player class
+//inherit all the good good from entity class
 class Player : public Entity {
     public:
         Player();

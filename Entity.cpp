@@ -1,9 +1,8 @@
 #include "Entity.hpp"
 
-
-Entity::Entity() {
-
-}
+Entity::Entity() {}
+//the constructor that is used for enemies
+//random hp and strength
 Entity::Entity(int xPos, int yPos) {
     x = xPos;
     y = yPos;
@@ -11,6 +10,7 @@ Entity::Entity(int xPos, int yPos) {
     strength = rand() % 10 + 1;
     alive = true;
 }
+//the constructor that is used for player
 Entity::Entity(int xPos, int yPos, int pHp, int pStr) {
     x = xPos;
     y = yPos;
@@ -18,9 +18,8 @@ Entity::Entity(int xPos, int yPos, int pHp, int pStr) {
     strength = pStr;
     alive = true;
 }
-Entity::~Entity() {
-    
-}
+Entity::~Entity() {}
+//setters
 void Entity::setX(int amount) {
     x = amount;
 }
@@ -32,6 +31,7 @@ void Entity::setHP(int amount) {
     if(hp <= 0)
         alive = false;
 }
+//getters
 int Entity::getX() {
     return x;
 }

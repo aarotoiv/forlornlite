@@ -12,7 +12,11 @@
 #include "Enemy.hpp"
 #include "Flower.hpp"
 
-
+//map class
+//essentially handles all the calculations and controls everything
+//changing X and Y size changes the grid size
+//seemed to work just fine with 50x50,
+//but 20x20 seems to be the sweet spot in terms of playability
 class Map {
     public:
         Map(Player *thePlayer);
