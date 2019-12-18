@@ -2,7 +2,7 @@
 #define Enemy_hpp
 
 #include <iostream>
-#include <cmath>
+
 #include "Entity.hpp"
 
 class Enemy : public Entity {

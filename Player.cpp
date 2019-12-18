@@ -27,7 +27,6 @@ void Player::checkBounds(int maxX, int maxY) {
     //successful move, stamina can be reduced
     else
         stamina--;
-    
 }
 void Player::applyEffect(std::string effect, int value) {
     if(effect == "hp") {
@@ -37,7 +36,7 @@ void Player::applyEffect(std::string effect, int value) {
 bool Player::incrementExp(int val) {
     exp += val;
     int levelProg = exp - (level-1) * 100;
-    if(levelProg > 100)  {
+    if(levelProg >= 100)  {
         level++;    
         stamina = 100;
         return true;

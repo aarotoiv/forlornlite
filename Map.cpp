@@ -1,18 +1,23 @@
 #include "Map.hpp"
-
+//constructor, set the local player pointer to the current player pointer
 Map::Map(Player *thePlayer) {
     player = thePlayer;
     stage = 1;
-    std::fill_n(logs, LOGCAP, "");
+    std::fill_n(logs, Y_SIZE, "");
     create();
 }
-Map::~Map() {
 
-}
+//destructor that does nothing
+Map::~Map() {}
+
+//draw funtion
+//draws the x*y grid and any entities or objects that it should
 void Map::draw() {
+    //stage level
     std::cout << "STAGE " << stage << std::endl;
-    for(int i = 0; i<X_SIZE; i++) {
-        for(int j = 0; j<Y_SIZE; j++) {
+    //loop thru x and y axis
+    for(int i = 0; i<Y_SIZE; i++) {
+        for(int j = 0; j<X_SIZE; j++) {
             if(i == player->getY() && j == player->getX()) 
                 player->drawPlayer();
             else if(i == gateY && j == gateX) {
@@ -51,8 +56,8 @@ void Map::drawLog(int lineNumber) {
     std::cout << "\t" << logs[lineNumber];
 }
 void Map::create() {
-    gateX = rand() % 19;
-    gateY = rand() % 19;
+    gateX = rand() % (X_SIZE - 1);
+    gateY = rand() % (Y_SIZE - 1);
     
     enemies.clear();
     flowers.clear();
@@ -61,7 +66,7 @@ void Map::create() {
         for(int j = 0; j<Y_SIZE; j++) {
             if(rand() % 100 > 90 && (i < player->getX() - 2 || i > player->getX() + 2) && (j < player->getY() - 2 || j > player->getY() + 2) && i != gateY && j != gateX)
                 enemies.push_back(* new Enemy(i, j));
-            else if(rand() % 100 > 97 && (i < player->getX() - 2 || i > player->getX() + 2) && (j < player->getY() - 2 || j > player->getY() + 2) && i != gateY && j != gateX) {
+            else if(rand() % 100 > 95 && (i < player->getX() - 2 || i > player->getX() + 2) && (j < player->getY() - 2 || j > player->getY() + 2) && i != gateY && j != gateX) {
                 flowers.push_back(* new Flower(i, j));
             }
         }
@@ -123,11 +128,11 @@ void Map::moveEnemies() {
 }
 
 void Map::updateLog(std::string text) {
-    for(int i = 0; i<LOGCAP; i++) {
-        if(i < LOGCAP - 1) 
+    for(int i = 0; i<Y_SIZE; i++) {
+        if(i < Y_SIZE - 1) 
             logs[i] = logs[i + 1];
         else 
-            logs[LOGCAP - 1] = text;
+            logs[Y_SIZE - 1] = text;
     }
 }
 

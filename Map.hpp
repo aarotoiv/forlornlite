@@ -5,6 +5,7 @@
 #include <vector>
 #include <cmath>
 #include <algorithm>
+
 #include "util.hpp"
 
 #include "Player.hpp"
@@ -36,11 +37,10 @@ class Map {
 
         static const int X_SIZE = 20;
         static const int Y_SIZE = 20;
-        static const int LOGCAP = 20;
         Player *player;
         std::vector<Enemy> enemies;
         std::vector<Flower> flowers;
-        std::string logs[LOGCAP]; 
+        std::string logs[Y_SIZE]; 
         int coords[X_SIZE][Y_SIZE];
         int stage;
         int gateX;
