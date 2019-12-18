@@ -1,12 +1,12 @@
-#Forlorn Lite
+# Forlorn Lite
 
 Forlorn is a minimalistic RPG that has had many forms. 
 This time it's a terminal based Roguelike.
 
-##Usage
+## Usage
 Pre-compiled executables can be found in the builds folder. 
 
-##Gameplay
+## Gameplay
 You control the player(Rectangle) and fight off enemies(Hexagon).
 At the beginning you have 100 hp and 100 stamina.
 Collecting flowers gives you 10hp. 
