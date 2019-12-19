@@ -8,11 +8,11 @@
 //enemy class
 //inherits all the important stuff from entity class
 class Enemy : public Entity {
-    public:
-        Enemy(int x, int y);
-        ~Enemy();
-        void draw();
-        
+public:
+	Enemy(int x, int y);
+	~Enemy();
+	void draw();
+
 };
 
 #endif
