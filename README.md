@@ -14,4 +14,4 @@ Each move takes 1 stamina.\
 Fighting enemies costs hp and gives experience, based on the enemys strength.\
 Gain 100/100 experience, to advance to the next stage and have your stamina replenished.\
 Get to the gate(G) to advance to the next stage.\
-Enemies become more aggressive based on the stage you're on.\
+Enemies become more aggressive based on the stage you're on.
