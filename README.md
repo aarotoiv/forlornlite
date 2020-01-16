@@ -1,6 +1,6 @@
 # Forlorn Lite
 
-Forlorn is a minimalistic RPG that has had many forms.\ 
+Forlorn is a minimalistic RPG that has had many forms.\
 This time it's a terminal based Roguelike.
 
 ## Usage
